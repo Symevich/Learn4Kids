@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🎮 Гуляй — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../audio.js"></script>
+  <script src="../theme.js"></script>
+  <style>
+    .quiz-card {
+      max-width: 520px;
+      margin: 32px auto 0;
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: var(--shadow-card);
+      padding: 28px 20px 24px;
+      text-align: center;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    /* ---- Exit cross ---- */
+    .btn-exit {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: var(--toggle-bg);
+      color: var(--text-title);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s, transform 0.12s;
+      z-index: 10;
+    }
+    .btn-exit:hover  { background: #e74c3c; color: #fff; }
+    .btn-exit:active { transform: scale(0.90); }
+
+    /* ---- Exit confirmation modal ---- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.visible { display: flex; }
+
+    .modal-box {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 28px 24px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-title);
+      margin-bottom: 8px;
+    }
+
+    .modal-sub {
+      font-size: 15px;
+      color: var(--text-subtitle);
+      margin-bottom: 24px;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.12s;
+    }
+    .modal-btn:active { transform: scale(0.95); }
+    .modal-btn-stay { background: var(--toggle-bg); color: var(--text-title); }
+    .modal-btn-stay:hover  { filter: brightness(0.92); }
+    .modal-btn-leave { background: #e74c3c; color: #fff; }
+    .modal-btn-leave:hover { filter: brightness(1.1); }
+
+    /* ---- Score bar ---- */
+    .score-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 15px;
+      color: var(--text-subtitle);
+      padding-left: 44px; /* space for exit btn */
+    }
+
+    .score-stars { font-size: 18px; letter-spacing: 2px; min-width: 60px; text-align: center; }
+
+    .progress-wrap {
+      height: 8px;
+      background: var(--toggle-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #2ecc71;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* ---- Question ---- */
+    .question-label {
+      font-size: 15px;
+      color: var(--text-subtitle);
+      margin-bottom: 8px;
+    }
+
+    .question-main {
+      font-size: 72px;
+      line-height: 1.1;
+      margin-bottom: 6px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .question-main.text-q {
+      font-size: 80px;
+      font-weight: bold;
+      color: var(--text-title);
+    }
+
+    .q-mystery {
+      font-size: 72px;
+      font-weight: bold;
+      color: var(--text-subtitle);
+      opacity: 0.3;
+    }
+
+    .question-hint {
+      font-size: 14px;
+      color: var(--text-subtitle);
+      margin-bottom: 20px;
+      min-height: 20px;
+    }
+
+    /* ---- Hear button ---- */
+    .btn-hear {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: inherit;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 22px;
+      transition: transform 0.15s, filter 0.15s;
+    }
+    .btn-hear:hover  { filter: brightness(1.1); }
+    .btn-hear:active { transform: scale(0.94); }
+
+    /* ---- Answer grid ---- */
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .answer-btn {
+      height: 90px;
+      padding: 10px 8px;
+      border: 3px solid transparent;
+      border-radius: 16px;
+      background: var(--bg-animal-tile);
+      color: var(--text-title);
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.15s, border-color 0.15s;
+      box-shadow: var(--shadow-animal);
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .answer-btn .ans-swatch {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .answer-btn .ans-text { line-height: 1.2; }
+
+    .answer-btn:hover  { transform: scale(1.04); }
+    .answer-btn:active { transform: scale(0.94); }
+
+    .answer-btn.correct {
+      background: #27ae60 !important;
+      border-color: #1e8449 !important;
+      color: #fff !important;
+      animation: pop 0.35s ease;
+    }
+
+    .answer-btn.wrong {
+      background: #e74c3c !important;
+      border-color: #c0392b !important;
+      color: #fff !important;
+      animation: shake 0.4s ease;
+    }
+
+    .answer-btn:disabled { cursor: default; transform: none !important; }
+
+    /* ---- Feedback ---- */
+    .feedback {
+      font-size: 22px;
+      font-weight: bold;
+      min-height: 32px;
+      margin-bottom: 12px;
+    }
+
+    .feedback.correct { color: #27ae60; }
+    .feedback.wrong   { color: #e74c3c; }
+
+    /* ---- Next button ---- */
+    .btn-next {
+      display: none;
+      background: #2c3e50;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 36px;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s;
+      margin-bottom: 8px;
+    }
+    .btn-next:hover  { background: #1a252f; }
+    .btn-next:active { transform: scale(0.95); }
+
+    /* ---- End screen ---- */
+    .end-screen { display: none; padding: 10px 0; }
+    .end-trophy { font-size: 80px; }
+    .end-title  { font-size: 26px; font-weight: bold; color: var(--text-title); margin: 8px 0 4px; }
+    .end-score  { font-size: 18px; color: var(--text-subtitle); margin-bottom: 20px; }
+    .end-stars  { font-size: 36px; letter-spacing: 4px; margin-bottom: 20px; }
+
+    .btn-restart {
+      background: #e67e22;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 28px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.12s;
+      margin: 6px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-restart:hover  { filter: brightness(1.1); }
+    .btn-restart:active { transform: scale(0.95); }
+
+    /* ---- Animations ---- */
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-8px); }
+      40%     { transform: translateX(8px); }
+      60%     { transform: translateX(-6px); }
+      80%     { transform: translateX(6px); }
+    }
+
+    @keyframes starPop {
+      0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+      60%  { transform: scale(1.3) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    .star-anim { display: inline-block; animation: starPop 0.4s ease forwards; }
+  </style>
+</head>
+<body>
+
+<!-- Exit confirmation modal -->
+<div class="modal-overlay" id="exit-modal">
+  <div class="modal-box">
+    <div class="modal-title">Выйсці з гульні?</div>
+    <div class="modal-sub">Твой прагрэс будзе страчаны</div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-stay"  onclick="closeExitModal()">Застацца</button>
+      <button class="modal-btn modal-btn-leave" onclick="confirmExit()">Выйсці</button>
+    </div>
+  </div>
+</div>
+
+<div class="quiz-card" id="quiz-card">
+
+  <!-- Exit cross (hidden on end screen) -->
+  <button class="btn-exit" id="btn-exit" onclick="openExitModal()" title="Выйсці">&#x2715;</button>
+
+  <!-- Score bar -->
+  <div class="score-bar">
+    <span id="q-counter">1 / 10</span>
+    <span class="score-stars" id="score-stars"></span>
+    <span id="score-num">0 ⭐</span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+  </div>
+
+  <!-- Question -->
+  <div class="question-label" id="q-label">Паслухай і выбяры адказ:</div>
+  <div class="question-main"  id="q-main"></div>
+  <div class="question-hint"  id="q-hint"></div>
+
+  <button class="btn-hear" id="btn-hear" onclick="playQuestion()">
+    🔊 Паслухаць
+  </button>
+
+  <!-- Answers -->
+  <div class="answer-grid" id="answer-grid"></div>
+
+  <!-- Feedback -->
+  <div class="feedback" id="feedback"></div>
+
+  <!-- Next — only shown after answering, no auto-advance -->
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+    Далей →
+  </button>
+
+  <!-- End screen -->
+  <div class="end-screen" id="end-screen">
+    <div class="end-trophy" id="end-trophy">🏆</div>
+    <div class="end-title">Малайчына!</div>
+    <div class="end-stars"  id="end-stars"></div>
+    <div class="end-score"  id="end-score"></div>
+    <br>
+    <button class="btn-restart" onclick="startQuiz()">🔄 Яшчэ раз</button>
+    <a class="btn-restart" href="../play.html">🏠 Выбраць тэму</a>
+  </div>
+
+</div>
+
+<script>
+/* ================================================================
+   DATA
+================================================================ */
+
+var DATASETS = {
+  digits: (function() {
+    var EN  = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+    var BEL = ['нуль','адзін','два','тры','чатыры','пяць','шэсць','сем','восем','дзевяць'];
+    return EN.map(function(en, i) {
+      return { type:'text', display:String(i), label:en, bel:BEL[i], audio:en };
+    });
+  }()),
+
+  alphabet: (function() {
+    var BEL = {A:'эй',B:'бі',C:'сі',D:'дзі',E:'і',F:'эф',G:'джы',H:'эйч',
+               I:'ай',J:'джэй',K:'кей',L:'эл',M:'эм',N:'эн',O:'оў',P:'пі',
+               Q:'к\'ю',R:'ар',S:'эс',T:'ці',U:'ю',V:'ві',W:'дабл-ю',
+               X:'экс',Y:'вай',Z:'зэд'};
+    return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(function(L) {
+      return { type:'text', display:L, label:L, bel:BEL[L], audio:L.toLowerCase() };
+    });
+  }()),
+
+  colors: [
+    {type:'color',display:'#e74c3c',label:'red',    bel:'чырвоны',  audio:'red'    },
+    {type:'color',display:'#e67e22',label:'orange', bel:'аранжавы', audio:'orange' },
+    {type:'color',display:'#d4ac0d',label:'yellow', bel:'жоўты',    audio:'yellow' },
+    {type:'color',display:'#2ecc71',label:'green',  bel:'зялёны',   audio:'green'  },
+    {type:'color',display:'#3498db',label:'blue',   bel:'сіні',     audio:'blue'   },
+    {type:'color',display:'#9b59b6',label:'purple', bel:'фіялетавы',audio:'purple' },
+    {type:'color',display:'#e91e63',label:'pink',   bel:'ружовы',   audio:'pink'   },
+    {type:'color',display:'#8b5e3c',label:'brown',  bel:'карычневы',audio:'brown'  },
+    {type:'color',display:'#2c3e50',label:'black',  bel:'чорны',    audio:'black'  },
+    {type:'color',display:'#bdc3c7',label:'white',  bel:'белы',     audio:'white'  },
+    {type:'color',display:'#7f8c8d',label:'gray',   bel:'шэры',     audio:'gray'   },
+    {type:'color',display:'#f0b429',label:'gold',   bel:'залаты',   audio:'gold'   },
+  ],
+
+  animals: [
+    {type:'emoji',display:'🐱',label:'cat',       bel:'кот',        audio:'cat'      },
+    {type:'emoji',display:'🐶',label:'dog',       bel:'сабака',     audio:'dog'      },
+    {type:'emoji',display:'🐦',label:'bird',      bel:'птушка',     audio:'bird'     },
+    {type:'emoji',display:'🐟',label:'fish',      bel:'рыба',       audio:'fish'     },
+    {type:'emoji',display:'🐰',label:'rabbit',    bel:'трус',       audio:'rabbit'   },
+    {type:'emoji',display:'🐻',label:'bear',      bel:'мядзведзь',  audio:'bear'     },
+    {type:'emoji',display:'🦁',label:'lion',      bel:'леў',        audio:'lion'     },
+    {type:'emoji',display:'🐯',label:'tiger',     bel:'тыгр',       audio:'tiger'    },
+    {type:'emoji',display:'🐘',label:'elephant',  bel:'слон',       audio:'elephant' },
+    {type:'emoji',display:'🐒',label:'monkey',    bel:'малпа',      audio:'monkey'   },
+    {type:'emoji',display:'🐴',label:'horse',     bel:'конь',       audio:'horse'    },
+    {type:'emoji',display:'🐮',label:'cow',       bel:'карова',     audio:'cow'      },
+    {type:'emoji',display:'🐷',label:'pig',       bel:'свіння',     audio:'pig'      },
+    {type:'emoji',display:'🐑',label:'sheep',     bel:'авечка',     audio:'sheep'    },
+    {type:'emoji',display:'🐔',label:'chicken',   bel:'курыца',     audio:'chicken'  },
+    {type:'emoji',display:'🦆',label:'duck',      bel:'качка',      audio:'duck'     },
+    {type:'emoji',display:'🐸',label:'frog',      bel:'жаба',       audio:'frog'     },
+    {type:'emoji',display:'🐍',label:'snake',     bel:'змяя',       audio:'snake'    },
+    {type:'emoji',display:'🐢',label:'turtle',    bel:'чарапаха',   audio:'turtle'   },
+    {type:'emoji',display:'🐧',label:'penguin',   bel:'пінгвін',    audio:'penguin'  },
+    {type:'emoji',display:'🦉',label:'owl',       bel:'сава',       audio:'owl'      },
+    {type:'emoji',display:'🦊',label:'fox',       bel:'ліса',       audio:'fox'      },
+    {type:'emoji',display:'🐺',label:'wolf',      bel:'воўк',       audio:'wolf'     },
+    {type:'emoji',display:'🦌',label:'deer',      bel:'алень',      audio:'deer'     },
+    {type:'emoji',display:'🦒',label:'giraffe',   bel:'жырафа',     audio:'giraffe'  },
+    {type:'emoji',display:'🦓',label:'zebra',     bel:'зебра',      audio:'zebra'    },
+    {type:'emoji',display:'🐊',label:'crocodile', bel:'кракадзіл',  audio:'crocodile'},
+    {type:'emoji',display:'🐬',label:'dolphin',   bel:'дэльфін',    audio:'dolphin'  },
+    {type:'emoji',display:'🐝',label:'bee',       bel:'пчала',      audio:'bee'      },
+    {type:'emoji',display:'🦋',label:'butterfly', bel:'матыль',     audio:'butterfly'},
+  ],
+};
+
+DATASETS.mix = DATASETS.digits
+  .concat(DATASETS.alphabet)
+  .concat(DATASETS.colors)
+  .concat(DATASETS.animals);
+
+/* ================================================================
+   QUIZ ENGINE
+================================================================ */
+
+var QUESTIONS_PER_ROUND = 10;
+var CHOICES             = 4;
+
+var pool        = [];
+var qIndex      = 0;
+var score       = 0;
+var answered    = false;
+var currentItem = null;
+
+function getMode() {
+  return new URLSearchParams(window.location.search).get('mode') || 'animals';
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function pickWrong(correct, dataset, count) {
+  var others = dataset.filter(function(d) { return d.audio !== correct.audio; });
+  return shuffle(others).slice(0, count);
+}
+
+function startQuiz() {
+  var mode    = getMode();
+  var dataset = DATASETS[mode] || DATASETS.animals;
+
+  pool    = shuffle(dataset).slice(0, QUESTIONS_PER_ROUND);
+  qIndex  = 0;
+  score   = 0;
+
+  document.getElementById('end-screen').style.display  = 'none';
+  document.getElementById('btn-exit').style.display    = 'flex';
+  document.getElementById('score-stars').textContent   = '';
+  document.getElementById('score-num').textContent     = '0 ⭐';
+
+  show('q-counter');
+  show('q-label');
+  show('q-main');
+  show('q-hint');
+  show('btn-hear');
+  show('answer-grid');
+  show('feedback');
+  document.querySelector('.progress-wrap').style.display = '';
+  document.querySelector('.score-bar').style.display     = '';
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered    = false;
+  currentItem = pool[qIndex];
+  var mode    = getMode();
+  var dataset = DATASETS[mode] || DATASETS.animals;
+
+  document.getElementById('q-counter').textContent        = (qIndex + 1) + ' / ' + pool.length;
+  document.getElementById('progress-bar').style.width     = (qIndex / pool.length * 100) + '%';
+  document.getElementById('feedback').textContent         = '';
+  document.getElementById('feedback').className           = 'feedback';
+  document.getElementById('btn-next').style.display       = 'none';
+
+  /* --- question display --- */
+  var qMain = document.getElementById('q-main');
+
+  if (currentItem.type === 'emoji') {
+    qMain.className = 'question-main';
+    qMain.innerHTML = '<span class="q-mystery">?</span>';
+    document.getElementById('q-label').textContent = 'Паслухай і выбяры адказ:';
+    document.getElementById('q-hint').textContent  = currentItem.bel;
+
+  } else if (currentItem.type === 'color') {
+    qMain.className = 'question-main';
+    qMain.innerHTML = '<div style="width:100px;height:100px;border-radius:50%;' +
+      'background:' + currentItem.display + ';margin:0 auto;' +
+      'box-shadow:0 4px 16px rgba(0,0,0,0.25)"></div>';
+    document.getElementById('q-label').textContent = 'Які гэта колер па-ангельску?';
+    document.getElementById('q-hint').textContent  = currentItem.bel;
+
+  } else {
+    qMain.className = 'question-main text-q';
+    qMain.textContent = currentItem.display;
+    document.getElementById('q-label').textContent = 'Як чытаецца гэты знак па-ангельску?';
+    document.getElementById('q-hint').textContent  = 'БЕЛ: ' + currentItem.bel;
+  }
+
+  TTS.speak(currentItem.audio);
+
+  /* --- answer buttons --- */
+  var wrongs  = pickWrong(currentItem, dataset, CHOICES - 1);
+  var choices = shuffle([currentItem].concat(wrongs));
+  var grid    = document.getElementById('answer-grid');
+  grid.innerHTML = '';
+
+  choices.forEach(function(item) {
+    var btn = document.createElement('button');
+    btn.className = 'answer-btn';
+
+    if (item.type === 'color') {
+      var swatch = document.createElement('div');
+      swatch.className = 'ans-swatch';
+      swatch.style.background = item.display;
+      var lbl = document.createElement('span');
+      lbl.className = 'ans-text';
+      lbl.textContent = item.label;
+      btn.appendChild(swatch);
+      btn.appendChild(lbl);
+    } else {
+      /* no emoji — text only */
+      var lbl = document.createElement('span');
+      lbl.className = 'ans-text';
+      lbl.textContent = item.label;
+      btn.appendChild(lbl);
+    }
+
+    btn.addEventListener('click', function() { checkAnswer(item, btn); });
+    grid.appendChild(btn);
+  });
+}
+
+function checkAnswer(chosen, btn) {
+  if (answered) return;
+  answered = true;
+
+  document.querySelectorAll('.answer-btn').forEach(function(b) { b.disabled = true; });
+
+  var correct = chosen.audio === currentItem.audio;
+
+  if (correct) {
+    score++;
+    btn.classList.add('correct');
+    document.getElementById('feedback').textContent = getCorrectPhrase();
+    document.getElementById('feedback').className   = 'feedback correct';
+    addStar();
+    document.getElementById('score-num').textContent = score + ' ⭐';
+    TTS.speak(currentItem.audio);
+  } else {
+    btn.classList.add('wrong');
+    /* highlight the right answer */
+    document.querySelectorAll('.answer-btn').forEach(function(b) {
+      if (!b.classList.contains('wrong')) {
+        var lbl = b.querySelector('.ans-text');
+        if (lbl && lbl.textContent.trim() === currentItem.label) {
+          b.classList.add('correct');
+        }
+      }
+    });
+    document.getElementById('feedback').textContent = getWrongPhrase();
+    document.getElementById('feedback').className   = 'feedback wrong';
+  }
+
+  /* show Next button — NO auto-advance */
+  document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  qIndex++;
+  if (qIndex >= pool.length) {
+    showEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function playQuestion() {
+  if (currentItem) TTS.speak(currentItem.audio);
+}
+
+function addStar() {
+  var el   = document.getElementById('score-stars');
+  var star = document.createElement('span');
+  star.className   = 'star-anim';
+  star.textContent = '⭐';
+  el.appendChild(star);
+}
+
+function showEnd() {
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('btn-exit').style.display   = 'none';
+
+  ['q-counter','q-label','q-main','q-hint','btn-hear','answer-grid','feedback','btn-next']
+    .forEach(function(id) { hide(id); });
+  document.querySelector('.progress-wrap').style.display = 'none';
+  document.querySelector('.score-bar').style.display     = 'none';
+
+  var pct    = Math.round(score / pool.length * 100);
+  var trophy = score === pool.length ? '🏆'
+             : score >= pool.length * 0.7 ? '🥇'
+             : score >= pool.length * 0.4 ? '🥈' : '🥉';
+  var stars  = score === pool.length ? '⭐⭐⭐'
+             : score >= pool.length * 0.7 ? '⭐⭐' : '⭐';
+
+  document.getElementById('end-trophy').textContent = trophy;
+  document.getElementById('end-stars').textContent  = stars;
+  document.getElementById('end-score').textContent  =
+    'Правільна: ' + score + ' з ' + pool.length + ' (' + pct + '%)';
+
+  document.getElementById('end-screen').style.display = 'block';
+}
+
+/* ---- Exit modal ---- */
+function openExitModal() {
+  document.getElementById('exit-modal').classList.add('visible');
+}
+function closeExitModal() {
+  document.getElementById('exit-modal').classList.remove('visible');
+}
+function confirmExit() {
+  window.location.href = '../play.html';
+}
+
+/* close modal on overlay click */
+document.getElementById('exit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeExitModal();
+});
+
+/* ---- Helpers ---- */
+function show(id) { var el = document.getElementById(id); if (el) el.style.display = ''; }
+function hide(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+var CORRECT_PHRASES = ['Выдатна! 🎉','Правільна! 👏','Малайчына! ⭐','Так! 🌟','Брава! 🎊'];
+var WRONG_PHRASES   = ['Не зусім... 😅','Паспрабуй яшчэ!','Амаль! 💪','Не тое... 🙈'];
+var correctIdx = 0, wrongIdx = 0;
+
+function getCorrectPhrase() {
+  return CORRECT_PHRASES[correctIdx++ % CORRECT_PHRASES.length];
+}
+function getWrongPhrase() {
+  return WRONG_PHRASES[wrongIdx++ % WRONG_PHRASES.length];
+}
+
+/* ---- Boot ---- */
+startQuiz();
+</script>
+</body>
+</html>

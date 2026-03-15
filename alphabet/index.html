@@ -5,18 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🔤 Алфавіт — Learn4Kids</title>
   <link rel="stylesheet" href="../style.css">
-  <script src="../tts.js"></script>
+  <script src="../audio.js"></script>
   <script src="../theme.js"></script>
   <style>
     .card-header {
-      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
       margin-bottom: 4px;
     }
 
     .case-toggle {
-      position: absolute;
-      top: 0;
-      left: 0;
       background: var(--btn-back-bg);
       color: #fff;
       border: none;
@@ -29,6 +34,7 @@
       transition: background 0.2s, transform 0.12s;
       letter-spacing: 1px;
       user-select: none;
+      flex-shrink: 0;
     }
 
     .case-toggle:hover  { background: var(--btn-back-hover); }
@@ -39,8 +45,10 @@
 <div class="page-card">
 
   <div class="card-header">
-    <button class="case-toggle" id="case-btn" title="Змяніць рэгістр">Aa</button>
-    <h1 class="page-title">🔤 Ангельскі алфавіт</h1>
+    <div class="header-top">
+      <button class="case-toggle" id="case-btn" title="Змяніць рэгістр">Aa</button>
+      <h1 class="page-title" style="margin-bottom:0;">🔤 Ангельскі алфавіт</h1>
+    </div>
     <p class="page-subtitle">Націсні на літару — пачуеш, як яна гучыць!</p>
   </div>
 
@@ -48,7 +56,7 @@
 
   <div class="hint-panel" id="hint" aria-live="polite"></div>
 
-  <a class="btn-back" href="../index.html">⬅️ Назад у меню</a>
+  <a class="btn-back" href="../learn.html">⬅️ Назад у меню</a>
 </div>
 
 <script>

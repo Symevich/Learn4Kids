@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>📖 Вучыся — Learn4Kids</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js"></script>
+  <style>
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .module-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 10px 18px;
+      border-radius: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-family: inherit;
+      font-weight: bold;
+      transition: transform 0.15s, filter 0.15s;
+      user-select: none;
+    }
+
+    .module-card:hover  { transform: scale(1.05); filter: brightness(1.08); }
+    .module-card:active { transform: scale(0.96); }
+    .module-card .mc-icon  { font-size: 40px; margin-bottom: 8px; }
+    .module-card .mc-label { font-size: 16px; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="page-card" style="margin-top:32px;">
+  <h1 class="page-title">📖 Вучыся</h1>
+  <p class="page-subtitle">Выбяры тэму і пачынай!</p>
+
+  <div class="module-grid">
+    <a class="module-card" href="digits/index.html"   style="background:#e74c3c;">
+      <span class="mc-icon">🔢</span><span class="mc-label">Лічбы 0–9</span>
+    </a>
+    <a class="module-card" href="numbers/index.html"  style="background:#16a085;">
+      <span class="mc-icon">🔢</span><span class="mc-label">Лікі 10–100</span>
+    </a>
+    <a class="module-card" href="alphabet/index.html" style="background:#f39c12;">
+      <span class="mc-icon">🔤</span><span class="mc-label">Алфавіт</span>
+    </a>
+    <a class="module-card" href="colors/index.html"   style="background:#8e44ad;">
+      <span class="mc-icon">🌈</span><span class="mc-label">Колеры</span>
+    </a>
+    <a class="module-card" href="animals/index.html"  style="background:#27ae60;">
+      <span class="mc-icon">🐾</span><span class="mc-label">Жывёлы</span>
+    </a>
+  </div>
+
+  <a class="btn-back" href="index.html">⬅️ Назад</a>
+</div>
+</body>
+</html>

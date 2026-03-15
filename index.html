@@ -6,19 +6,94 @@
   <title>Learn4Kids — Вучым ангельскую!</title>
   <link rel="stylesheet" href="style.css">
   <script src="theme.js"></script>
+  <style>
+    .splash {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .splash-logo {
+      font-size: 64px;
+      margin-bottom: 8px;
+    }
+
+    .splash-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--text-title);
+      margin-bottom: 6px;
+    }
+
+    .splash-tagline {
+      font-size: 17px;
+      color: var(--text-subtitle);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 28px;
+      border: none;
+      border-radius: 22px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.16s, filter 0.16s;
+      user-select: none;
+    }
+
+    .mode-btn:hover  { transform: scale(1.04); filter: brightness(1.08); }
+    .mode-btn:active { transform: scale(0.96); }
+
+    .mode-btn-learn { background: #2980b9; }
+    .mode-btn-play  { background: #e67e22; }
+
+    .mode-btn .btn-icon  { font-size: 40px; flex-shrink: 0; }
+    .mode-btn .btn-text  { text-align: left; }
+    .mode-btn .btn-title { display: block; font-size: 22px; }
+    .mode-btn .btn-sub   { display: block; font-size: 13px; opacity: 0.88; margin-top: 2px; }
+  </style>
 </head>
 <body>
-<div class="page-card" style="text-align:center; margin-top: 40px;">
-  <h1 class="page-title">🎓 Learn4Kids</h1>
-  <h2 class="page-subtitle" style="color:#e67e22; font-size:20px; margin-bottom:6px;">Вучым ангельскую мову гуляючы!</h2>
-  <p class="page-subtitle">Выбяры модуль і пачынай!</p>
+<div class="splash">
+  <div class="splash-logo">🎓</div>
+  <div class="splash-title">Learn4Kids</div>
+  <p class="splash-tagline">Вучым ангельскую мову гуляючы!</p>
 
-  <div>
-    <a class="menu-btn" href="digits/index.html"  style="background:#e74c3c;">🔢 Лічбы 0–9</a>
-    <a class="menu-btn" href="numbers/index.html" style="background:#16a085;">🔢 Лікі 10–100</a>
-    <a class="menu-btn" href="alphabet/index.html" style="background:#f39c12;">🔤 Алфавіт</a>
-    <a class="menu-btn" href="colors/index.html"  style="background:#8e44ad;">🌈 Колеры</a>
-    <a class="menu-btn" href="animals/index.html" style="background:#27ae60;">🐾 Жывёлы</a>
+  <div class="mode-buttons">
+    <a class="mode-btn mode-btn-learn" href="learn.html">
+      <span class="btn-icon">📖</span>
+      <span class="btn-text">
+        <span class="btn-title">Вучыся</span>
+        <span class="btn-sub">Вывучай новыя словы</span>
+      </span>
+    </a>
+
+    <a class="mode-btn mode-btn-play" href="play.html">
+      <span class="btn-icon">🎮</span>
+      <span class="btn-text">
+        <span class="btn-title">Гуляй</span>
+        <span class="btn-sub">Праверце свае веды</span>
+      </span>
+    </a>
   </div>
 </div>
 </body>

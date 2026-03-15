@@ -1,98 +1,146 @@
+/* =============================================
+   Learn4Kids — shared styles
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    font-family: 'Comic Sans MS', 'Arial', sans-serif;
-    background-color: #f0f8ff;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', Arial, sans-serif;
+  background: #f0f8ff;
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-h1 {
-    color: #2c3e50;
-    font-size: 2.5em;
+/* ---- Page card ---- */
+.page-card {
+  display: inline-block;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  padding: 28px 24px 24px;
+  max-width: 860px;
+  width: 100%;
 }
 
-h2 {
-    color: #e67e22;
+.page-title {
+  font-size: 28px;
+  color: #2c3e50;
+  margin-bottom: 6px;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+.page-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
 }
 
-.btn {
-    display: inline-block;
-    margin: 10px;
-    padding: 15px 30px;
-    font-size: 24px;
-    color: white;
-    background-color: #3498db;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 0.2s, background 0.2s;
+/* ---- Item grid (letters, digits, colors…) ---- */
+.item-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
 }
 
-.btn:hover {
-    transform: scale(1.05);
-    background-color: #2980b9;
+/* ---- Generic clickable tile ---- */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
 }
 
-.btn-secondary {
-    background-color: #95a5a6;
-    font-size: 18px;
-    padding: 10px 20px;
+.tile:hover  { transform: scale(1.12); box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+.tile:active { transform: scale(0.94); }
+
+/* size variants */
+.tile--lg { width: 72px;  height: 72px;  font-size: 28px; }
+.tile--md { width: 64px;  height: 64px;  font-size: 22px; }
+.tile--sm { width: 58px;  height: 58px;  font-size: 20px; }
+.tile--wide { width: 130px; height: 80px; font-size: 18px; border-radius: 10px; }
+
+/* ---- Hint / feedback panel ---- */
+.hint-panel {
+  margin: 16px auto 0;
+  min-height: 80px;
+  font-size: 20px;
+  line-height: 1.5;
 }
 
-.btn-secondary:hover {
-    background-color: #7f8c8d;
+.hint-panel .hint-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
-.game-area {
-    margin-top: 30px;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.hint-panel .hint-letter {
+  font-size: 56px;
+  font-weight: bold;
+  color: #e74c3c;
 }
 
-.option-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
+.hint-panel .lang-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  background: #eee;
+  color: #444;
 }
 
-.feedback {
-    font-size: 24px;
-    margin-top: 20px;
-    font-weight: bold;
-    height: 30px;
+.hint-panel .lang-en  { background: #d6eaf8; color: #1a5276; }
+.hint-panel .lang-bel { background: #d5f5e3; color: #1e8449; }
+
+.hint-panel .hint-word-en  { font-size: 24px; font-weight: bold; color: #2c3e50; }
+.hint-panel .hint-word-bel { font-size: 18px; color: #555; }
+
+/* ---- Back button ---- */
+.btn-back {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #2c3e50;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 16px;
+  transition: background 0.2s;
 }
 
-.feedback.correct { color: #27ae60; }
-.feedback.wrong { color: #c0392b; }
+.btn-back:hover { background: #1a252f; }
 
-.big-emoji {
-    font-size: 100px;
-    cursor: pointer;
-    transition: transform 0.2s;
+/* ---- Home menu buttons ---- */
+.menu-btn {
+  display: inline-block;
+  margin: 8px;
+  padding: 16px 32px;
+  font-size: 22px;
+  font-family: inherit;
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.18s, filter 0.18s;
 }
 
-.big-emoji:hover {
-    transform: scale(1.2);
-}
-
-.shape-box {
-    width: 150px;
-    height: 150px;
-    margin: 20px;
-    transition: transform 0.2s;
-}
+.menu-btn:hover  { transform: scale(1.06); filter: brightness(1.08); }
+.menu-btn:active { transform: scale(0.97); }

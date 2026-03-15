@@ -3,46 +3,105 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>🐾 Animals — Learn4Kids</title>
+  <title>🐾 Жывёлы — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
   <style>
-    body{font-family:Arial, sans-serif; background:#f6f8ff; display:flex; align-items:center; justify-content:center; height:100vh; margin:0}
-    .card{ background:white; padding:20px; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,.08); text-align:center}
-    .grid{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:10px }
-    .animal{ width:120px; height:120px; border-radius:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; color:white; }
-    .caption{ margin-top:6px; font-size:14px; }
+    .animal-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.15s, box-shadow 0.15s;
+      user-select: none;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .animal-tile:hover  { transform: scale(1.12); box-shadow: 0 6px 18px rgba(0,0,0,0.20); }
+    .animal-tile:active { transform: scale(0.94); }
+
+    .animal-tile .animal-emoji { font-size: 42px; line-height: 1; }
+    .animal-tile .animal-name  { font-size: 12px; font-weight: bold; color: #2c3e50; margin-top: 4px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>🐾 Animals</h2>
-    <p>Click an animal to hear its name in English and see Belarusian translation.</p>
-    <div class="grid" id="grid"></div>
-    <div class="caption" id="caption"></div>
-  </div>
-  <script>
-    const items = [
-      {en:'cat', be:'котыка', color:'#e74c3c'},
-      {en:'dog', be:'сабака', color:'#3498db'},
-      {en:'bird', be:'птушка', color:'#2ecc71'},
-      {en:'lion', be:'леў', color:'#f1c40f'},
-      {en:'fish', be:'рыба', color:'#9b59b6'}
-    ];
-    const grid=document.getElementById('grid');
-    const caption=document.getElementById('caption');
-    items.forEach(it=>{
-      const e=document.createElement('div');
-      e.className='animal';
-      e.style.backgroundColor=it.color;
-      e.textContent=it.en;
-      e.onclick=()=>{
-        caption.innerHTML = `<strong>${it.en}</strong> — ${it.be}`;
-        if ('speechSynthesis' in window){
-          window.speechSynthesis.cancel();
-          const u=new SpeechSynthesisUtterance(it.en); u.lang='en-US'; window.speechSynthesis.speak(u);
-        }
-      };
-      grid.appendChild(e);
-    });
-  </script>
+<div class="page-card">
+  <h1 class="page-title">🐾 Жывёлы</h1>
+  <p class="page-subtitle">Націсні на жывёліну — пачуеш яе назву па-ангельску!</p>
+
+  <div class="item-grid" id="animal-grid"></div>
+
+  <div class="hint-panel" id="hint" aria-live="polite"></div>
+
+  <a class="btn-back" href="../index.html">⬅️ Назад у меню</a>
+</div>
+
+<script>
+const ANIMALS = [
+  { en: 'cat',         bel: 'кот',         emoji: '🐱' },
+  { en: 'dog',         bel: 'сабака',      emoji: '🐶' },
+  { en: 'bird',        bel: 'птушка',      emoji: '🐦' },
+  { en: 'fish',        bel: 'рыба',        emoji: '🐟' },
+  { en: 'rabbit',      bel: 'трус',        emoji: '🐰' },
+  { en: 'bear',        bel: 'мядзведзь',   emoji: '🐻' },
+  { en: 'lion',        bel: 'леў',         emoji: '🦁' },
+  { en: 'tiger',       bel: 'тыгр',        emoji: '🐯' },
+  { en: 'elephant',    bel: 'слон',        emoji: '🐘' },
+  { en: 'monkey',      bel: 'малпа',       emoji: '🐒' },
+  { en: 'horse',       bel: 'конь',        emoji: '🐴' },
+  { en: 'cow',         bel: 'карова',      emoji: '🐮' },
+  { en: 'pig',         bel: 'свіння',      emoji: '🐷' },
+  { en: 'sheep',       bel: 'авечка',      emoji: '🐑' },
+  { en: 'chicken',     bel: 'курыца',      emoji: '🐔' },
+  { en: 'duck',        bel: 'качка',       emoji: '🦆' },
+  { en: 'frog',        bel: 'жаба',        emoji: '🐸' },
+  { en: 'snake',       bel: 'змяя',        emoji: '🐍' },
+  { en: 'turtle',      bel: 'чарапаха',    emoji: '🐢' },
+  { en: 'penguin',     bel: 'пінгвін',     emoji: '🐧' },
+  { en: 'owl',         bel: 'сава',        emoji: '🦉' },
+  { en: 'fox',         bel: 'ліса',        emoji: '🦊' },
+  { en: 'wolf',        bel: 'воўк',        emoji: '🐺' },
+  { en: 'deer',        bel: 'алень',       emoji: '🦌' },
+  { en: 'giraffe',     bel: 'жырафа',      emoji: '🦒' },
+  { en: 'zebra',       bel: 'зебра',       emoji: '🦓' },
+  { en: 'crocodile',   bel: 'кракадзіл',   emoji: '🐊' },
+  { en: 'dolphin',     bel: 'дэльфін',     emoji: '🐬' },
+  { en: 'bee',         bel: 'пчала',       emoji: '🐝' },
+  { en: 'butterfly',   bel: 'матыль',      emoji: '🦋' }
+];
+
+const grid = document.getElementById('animal-grid');
+const hint = document.getElementById('hint');
+
+ANIMALS.forEach(function(animal) {
+  const tile = document.createElement('button');
+  tile.className = 'animal-tile';
+  tile.innerHTML =
+    '<span class="animal-emoji">' + animal.emoji + '</span>' +
+    '<span class="animal-name">' + animal.en + '</span>';
+  tile.addEventListener('click', function() { speak(animal); });
+  grid.appendChild(tile);
+});
+
+function speak(animal) {
+  hint.innerHTML =
+    '<div style="font-size:64px; line-height:1;">' + animal.emoji + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + animal.en + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + animal.bel + '</span></div>';
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(animal.en);
+    utt.lang = 'en-US';
+    utt.rate = 0.9;
+    window.speechSynthesis.speak(utt);
+  }
+}
+</script>
 </body>
 </html>

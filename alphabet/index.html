@@ -1,62 +1,68 @@
 <!doctype html>
 <html lang="be">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>🔤 Alphabet — Learn4Kids</title>
-<style>
-body { font-family: Arial, sans-serif; background:#f9f9f9; text-align:center; margin:0; padding:20px; }
-.wrap { display:inline-block; padding:20px; background:white; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,.08); }
-h1 { font-size:28px; margin:0 0 8px; }
-.letters { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:20px 0 10px; }
-.letter-btn { width:72px; height:72px; border-radius:10px; border:0; font-size:28px; font-weight:bold; color:#fff; cursor:pointer; }
-.hint { font-size:22px; margin-top:8px; min-height:32px; }
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🔤 Алфавіт — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-<div class="wrap">
-<h1>🔤 Ангельскі алфавіт</h1>
-<p>Націсні на літару — пачуеш, як яна гучыць (англійская)! Подказка бачным шрыфтам.</p>
+<div class="page-card">
+  <h1 class="page-title">🔤 Ангельскі алфавіт</h1>
+  <p class="page-subtitle">Націсні на літару — пачуеш, як яна гучыць!</p>
 
-<div class="letters" id="letterGrid"></div>
-<div class="hint" id="hint"></div>
-<div style="margin-top:16px">
-  <a href="../index.html" class="btn" style="background:#2c3e50;color:white;padding:10px 16px;border-radius:6px;text-decoration:none">⬅️ Назад</a>
-</div>
+  <div class="item-grid" id="letter-grid"></div>
 
+  <div class="hint-panel" id="hint" aria-live="polite"></div>
+
+  <a class="btn-back" href="../index.html">⬅️ Назад у меню</a>
 </div>
 
 <script>
-const letterNames = {
-A:'эй', B:'бі', C:'сі', D:'ді', E:'і', F:'эф', G:'джы', H:'эйч',
-I:'ай', J:'джэй', K:'кей', L:'эл', M:'эм', N:'эн', O:'оʊ', P:'пі',
-Q:'кью', R:'ар', S:'эс', T:'ті', U:'ю', V:'ві', W:'дабл-ю', X:'экс',
-Y:'вай', Z:'зі',
+/* Belarusian phonetic approximations for each letter name */
+const LETTER_NAMES_BEL = {
+  A:'эй',  B:'бі',     C:'сі',    D:'дзі',    E:'і',
+  F:'эф',  G:'джы',    H:'эйч',   I:'ай',     J:'джэй',
+  K:'кей', L:'эл',     M:'эм',    N:'эн',     O:'оў',
+  P:'пі',  Q:'к\'ю',   R:'ар',    S:'эс',     T:'ці',
+  U:'ю',   V:'ві',     W:'дабл-ю',X:'экс',    Y:'вай', Z:'зэд'
 };
-const colors = ['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c',
-'#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722'];
-const grid = document.getElementById('letterGrid');
+
+const COLORS = [
+  '#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c',
+  '#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722',
+  '#8bc34a','#795548','#607d8b'
+];
+
+const grid = document.getElementById('letter-grid');
 const hint = document.getElementById('hint');
-for (let i=0;i<26;i++){
-const L = String.fromCharCode(65+i);
-const btn = document.createElement('button');
-btn.className = 'letter-btn';
-btn.textContent = L;
-btn.style.backgroundColor = colors[i % colors.length];
-btn.onclick = () => sayLetter(L);
-grid.appendChild(btn);
+
+for (let i = 0; i < 26; i++) {
+  const letter = String.fromCharCode(65 + i);
+  const btn = document.createElement('button');
+  btn.className = 'tile tile--lg';
+  btn.textContent = letter;
+  btn.style.backgroundColor = COLORS[i % COLORS.length];
+  btn.addEventListener('click', () => speak(letter));
+  grid.appendChild(btn);
 }
-function sayLetter(L){
-const name = letterNames[L] || '';
-hint.innerHTML = '<div style="font-size:44px;font-weight:bold;color:#e74c3c">'+L+'</div>' +
-'<div>Вымаўляецца: <strong>'+name+'</strong></div>';
-if ('speechSynthesis' in window){
-window.speechSynthesis.cancel();
-const u = new SpeechSynthesisUtterance(L);
-u.lang = 'en-US';
-u.rate = 0.9;
-window.speechSynthesis.speak(u);
-}
+
+function speak(letter) {
+  const belName = LETTER_NAMES_BEL[letter] || '';
+
+  hint.innerHTML =
+    '<div class="hint-letter">' + letter + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + letter + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + belName + '</span></div>';
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(letter);
+    utt.lang  = 'en-US';
+    utt.rate  = 0.8;
+    utt.pitch = 1.1;
+    window.speechSynthesis.speak(utt);
+  }
 }
 </script>
 </body>

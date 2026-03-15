@@ -1,1 +1,67 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Colors</title></head><body><h1>Colors & Shapes</h1><p>Choose a color for the circle.</p><button onclick="choose('red')">Red</button><button onclick="choose('blue')">Blue</button><div id="out"></div><script>function choose(c){document.getElementById('out').textContent='You chose '+c;}</script></body></html>
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🌈 Колеры — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="page-card">
+  <h1 class="page-title">🌈 Колеры</h1>
+  <p class="page-subtitle">Націсні на колер — пачуеш яго назву па-ангельску!</p>
+
+  <div class="item-grid" id="color-grid"></div>
+
+  <div class="hint-panel" id="hint" aria-live="polite"></div>
+
+  <a class="btn-back" href="../index.html">⬅️ Назад у меню</a>
+</div>
+
+<script>
+const COLORS = [
+  { en: 'red',    bel: 'чырвоны',  hex: '#e74c3c' },
+  { en: 'orange', bel: 'аранжавы', hex: '#e67e22' },
+  { en: 'yellow', bel: 'жоўты',    hex: '#d4ac0d' },
+  { en: 'green',  bel: 'зялёны',   hex: '#2ecc71' },
+  { en: 'blue',   bel: 'сіні',     hex: '#3498db' },
+  { en: 'purple', bel: 'фіялетавы',hex: '#9b59b6' },
+  { en: 'pink',   bel: 'ружовы',   hex: '#e91e63' },
+  { en: 'brown',  bel: 'карычневы',hex: '#8b5e3c' },
+  { en: 'black',  bel: 'чорны',    hex: '#2c3e50' },
+  { en: 'white',  bel: 'белы',     hex: '#bdc3c7', dark: true },
+  { en: 'gray',   bel: 'шэры',     hex: '#7f8c8d' },
+  { en: 'gold',   bel: 'залаты',   hex: '#f0b429' }
+];
+
+const grid = document.getElementById('color-grid');
+const hint = document.getElementById('hint');
+
+COLORS.forEach(function(color) {
+  const tile = document.createElement('div');
+  tile.className = 'tile tile--wide';
+  tile.style.backgroundColor = color.hex;
+  /* white tile needs dark text to be readable */
+  tile.style.color = color.dark ? '#2c3e50' : '#ffffff';
+  tile.textContent = color.en;
+  tile.addEventListener('click', function() { speak(color); });
+  grid.appendChild(tile);
+});
+
+function speak(color) {
+  hint.innerHTML =
+    '<div class="hint-word-en" style="font-size:32px; margin-bottom:6px;">' + color.en + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + color.en + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + color.bel + '</span></div>';
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(color.en);
+    utt.lang = 'en-US';
+    utt.rate = 0.95;
+    window.speechSynthesis.speak(utt);
+  }
+}
+</script>
+</body>
+</html>

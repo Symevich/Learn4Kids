@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🐾 Animals — Learn4Kids</title>
+  <style>
+    body{font-family:Arial, sans-serif; background:#f6f8ff; display:flex; align-items:center; justify-content:center; height:100vh; margin:0}
+    .card{ background:white; padding:20px; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,.08); text-align:center}
+    .grid{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:10px }
+    .animal{ width:120px; height:120px; border-radius:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; color:white; }
+    .caption{ margin-top:6px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🐾 Animals</h2>
+    <p>Click an animal to hear its name in English and see Belarusian translation.</p>
+    <div class="grid" id="grid"></div>
+    <div class="caption" id="caption"></div>
+  </div>
+  <script>
+    const items = [
+      {en:'cat', be:'котыка', color:'#e74c3c'},
+      {en:'dog', be:'сабака', color:'#3498db'},
+      {en:'bird', be:'птушка', color:'#2ecc71'},
+      {en:'lion', be:'леў', color:'#f1c40f'},
+      {en:'fish', be:'рыба', color:'#9b59b6'}
+    ];
+    const grid=document.getElementById('grid');
+    const caption=document.getElementById('caption');
+    items.forEach(it=>{
+      const e=document.createElement('div');
+      e.className='animal';
+      e.style.backgroundColor=it.color;
+      e.textContent=it.en;
+      e.onclick=()=>{
+        caption.innerHTML = `<strong>${it.en}</strong> — ${it.be}`;
+        if ('speechSynthesis' in window){
+          window.speechSynthesis.cancel();
+          const u=new SpeechSynthesisUtterance(it.en); u.lang='en-US'; window.speechSynthesis.speak(u);
+        }
+      };
+      grid.appendChild(e);
+    });
+  </script>
+</body>
+</html>

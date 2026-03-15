@@ -1,0 +1,98 @@
+body {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    background-color: #f0f8ff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 2.5em;
+}
+
+h2 {
+    color: #e67e22;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 24px;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.game-area {
+    margin-top: 30px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.feedback {
+    font-size: 24px;
+    margin-top: 20px;
+    font-weight: bold;
+    height: 30px;
+}
+
+.feedback.correct { color: #27ae60; }
+.feedback.wrong { color: #c0392b; }
+
+.big-emoji {
+    font-size: 100px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.big-emoji:hover {
+    transform: scale(1.2);
+}
+
+.shape-box {
+    width: 150px;
+    height: 150px;
+    margin: 20px;
+    transition: transform 0.2s;
+}

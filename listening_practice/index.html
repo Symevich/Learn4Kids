@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Listening Practice - Learn4Kids</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#f6f9ff;padding:20px}
+    .card{max-width:640px;margin:0 auto;background:white;border-radius:8px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+    h2{margin-top:0}
+    button{margin:6px;padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#eee}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Listening Practice: Simple phrases (Belarusian/English)</h2>
+    <p>Слухайце фразы і выбірайце правільны адказ.</p>
+    <div id="phrases"></div>
+    <div id="result" style="margin-top:12px;font-weight:bold"></div>
+  </div>
+  <script>
+    const items = [
+      {text: 'Hello!', answer: 'Hello!'},
+      {text: 'How are you?', answer: 'I am good.'},
+      {text: 'What is your name?', answer: 'My name is Learn4Kids.'}
+    ];
+    const container = document.getElementById('phrases');
+    items.forEach((it,i)=>{
+      const btn = document.createElement('button');
+      btn.textContent = it.text;
+      btn.onclick = ()=>{ document.getElementById('result').textContent = 'You heard: ' + it.text;
+      };
+      container.appendChild(btn);
+    });
+    // Optional: SpeechSynthesis for Belarusian/English guidance
+    if ('speechSynthesis' in window){
+      const uttr = new SpeechSynthesisUtterance('Welcome to Listening Practice. Translate what you hear into English.');
+      uttr.lang = 'en-US';
+      // you can uncomment to speak on load
+      // window.speechSynthesis.speak(uttr);
+    }
+  </script>
+</body>
+</html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🐾 Жывёлы — Learn4Kids</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../tts.js"></script>
   <script src="../theme.js"></script>
   <style>
     .animal-tile {
@@ -95,14 +96,10 @@ function speak(animal) {
     '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + animal.en + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + animal.bel + '</span></div>';
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(animal.en);
-    utt.lang = 'en-US';
-    utt.rate = 0.9;
-    window.speechSynthesis.speak(utt);
-  }
+  TTS.speak(animal.en);
 }
+
+TTS.preload();
 </script>
 </body>
 </html>

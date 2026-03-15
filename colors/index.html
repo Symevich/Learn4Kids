@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🌈 Колеры — Learn4Kids</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../tts.js"></script>
   <script src="../theme.js"></script>
 </head>
 <body>
@@ -55,14 +56,10 @@ function speak(color) {
     '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + color.en + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + color.bel + '</span></div>';
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(color.en);
-    utt.lang = 'en-US';
-    utt.rate = 0.95;
-    window.speechSynthesis.speak(utt);
-  }
+  TTS.speak(color.en);
 }
+
+TTS.preload();
 </script>
 </body>
 </html>

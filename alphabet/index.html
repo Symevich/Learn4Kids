@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🔤 Алфавіт — Learn4Kids</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../tts.js"></script>
   <script src="../theme.js"></script>
 </head>
 <body>
@@ -56,15 +57,10 @@ function speak(letter) {
     '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + letter + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + belName + '</span></div>';
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(letter);
-    utt.lang  = 'en-US';
-    utt.rate  = 0.8;
-    utt.pitch = 1.1;
-    window.speechSynthesis.speak(utt);
-  }
+  TTS.speak(letter);
 }
+
+TTS.preload();
 </script>
 </body>
 </html>

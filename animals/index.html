@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🐾 Жывёлы — Learn4Kids</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../theme.js"></script>
   <style>
     .animal-tile {
       display: flex;
@@ -17,16 +18,16 @@
       border-radius: 16px;
       cursor: pointer;
       font-family: inherit;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
       user-select: none;
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      background: var(--bg-animal-tile);
+      box-shadow: var(--shadow-animal);
     }
-    .animal-tile:hover  { transform: scale(1.12); box-shadow: 0 6px 18px rgba(0,0,0,0.20); }
+    .animal-tile:hover  { transform: scale(1.12); box-shadow: var(--shadow-hover); }
     .animal-tile:active { transform: scale(0.94); }
 
     .animal-tile .animal-emoji { font-size: 42px; line-height: 1; }
-    .animal-tile .animal-name  { font-size: 12px; font-weight: bold; color: #2c3e50; margin-top: 4px; }
+    .animal-tile .animal-name  { font-size: 12px; font-weight: bold; color: var(--text-animal); margin-top: 4px; transition: color 0.3s; }
   </style>
 </head>
 <body>

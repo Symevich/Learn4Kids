@@ -1,1 +1,0 @@
-Extra bootstrapping notes for Learn4Kids project. Comes with 3 modules and a main index.html.

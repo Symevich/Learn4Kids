@@ -2,44 +2,146 @@
    Learn4Kids — shared styles
    ============================================= */
 
+/* ---------- CSS variables: light theme (default) ---------- */
+:root {
+  --bg-page:        #f0f8ff;
+  --bg-card:        #ffffff;
+  --bg-animal-tile: #ffffff;
+  --shadow-card:    0 6px 24px rgba(0, 0, 0, 0.10);
+  --shadow-animal:  0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-hover:   0 6px 18px rgba(0, 0, 0, 0.20);
+
+  --text-title:     #2c3e50;
+  --text-subtitle:  #666666;
+  --text-hint-en:   #2c3e50;
+  --text-hint-bel:  #555555;
+  --text-animal:    #2c3e50;
+
+  --lang-en-bg:     #d6eaf8;
+  --lang-en-text:   #1a5276;
+  --lang-bel-bg:    #d5f5e3;
+  --lang-bel-text:  #1e8449;
+
+  --btn-back-bg:    #2c3e50;
+  --btn-back-hover: #1a252f;
+
+  --toggle-bg:      #dde3ea;
+  --toggle-knob:    #ffffff;
+  --toggle-icon:    '☀️';
+}
+
+/* ---------- CSS variables: dark theme ---------- */
+[data-theme="dark"] {
+  --bg-page:        #0f1923;
+  --bg-card:        #1a2635;
+  --bg-animal-tile: #243447;
+  --shadow-card:    0 6px 24px rgba(0, 0, 0, 0.40);
+  --shadow-animal:  0 2px 8px rgba(0, 0, 0, 0.40);
+  --shadow-hover:   0 6px 18px rgba(0, 0, 0, 0.55);
+
+  --text-title:     #e8f0fe;
+  --text-subtitle:  #94a3b8;
+  --text-hint-en:   #e8f0fe;
+  --text-hint-bel:  #94a3b8;
+  --text-animal:    #e2e8f0;
+
+  --lang-en-bg:     #1e3a5f;
+  --lang-en-text:   #7ec8f4;
+  --lang-bel-bg:    #14422a;
+  --lang-bel-text:  #6ee7a8;
+
+  --btn-back-bg:    #334155;
+  --btn-back-hover: #475569;
+
+  --toggle-bg:      #334155;
+  --toggle-knob:    #e2e8f0;
+  --toggle-icon:    '🌙';
+}
+
+/* ---------- Reset ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ---------- Base ---------- */
 body {
   font-family: 'Comic Sans MS', 'Chalkboard SE', Arial, sans-serif;
-  background: #f0f8ff;
+  background: var(--bg-page);
   text-align: center;
   min-height: 100vh;
   padding: 20px;
+  transition: background 0.3s;
 }
 
-/* ---- Page card ---- */
+/* ---------- Theme toggle button ---------- */
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 100;
+  background: var(--toggle-bg);
+  border: none;
+  border-radius: 50px;
+  width: 56px;
+  height: 30px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.theme-toggle .toggle-knob {
+  position: absolute;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--toggle-knob);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1), background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+[data-theme="dark"] .theme-toggle .toggle-knob {
+  transform: translateX(26px);
+}
+
+/* ---------- Page card ---------- */
 .page-card {
   display: inline-block;
-  background: #ffffff;
+  background: var(--bg-card);
   border-radius: 20px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--shadow-card);
   padding: 28px 24px 24px;
   max-width: 860px;
   width: 100%;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
 .page-title {
   font-size: 28px;
-  color: #2c3e50;
+  color: var(--text-title);
   margin-bottom: 6px;
+  transition: color 0.3s;
 }
 
 .page-subtitle {
   font-size: 16px;
-  color: #666;
+  color: var(--text-subtitle);
   margin-bottom: 20px;
+  transition: color 0.3s;
 }
 
-/* ---- Item grid (letters, digits, colors…) ---- */
+/* ---------- Item grid ---------- */
 .item-grid {
   display: flex;
   flex-wrap: wrap;
@@ -48,7 +150,7 @@ body {
   margin: 16px 0;
 }
 
-/* ---- Generic clickable tile ---- */
+/* ---------- Generic clickable tile ---------- */
 .tile {
   display: flex;
   align-items: center;
@@ -63,16 +165,34 @@ body {
   user-select: none;
 }
 
-.tile:hover  { transform: scale(1.12); box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+.tile:hover  { transform: scale(1.12); box-shadow: 0 4px 14px rgba(0,0,0,0.30); }
 .tile:active { transform: scale(0.94); }
 
 /* size variants */
-.tile--lg { width: 72px;  height: 72px;  font-size: 28px; }
-.tile--md { width: 64px;  height: 64px;  font-size: 22px; }
-.tile--sm { width: 58px;  height: 58px;  font-size: 20px; }
-.tile--wide { width: 130px; height: 80px; font-size: 18px; border-radius: 10px; }
+.tile--lg   { width: 72px;  height: 72px;  font-size: 28px; }
+.tile--md   { width: 64px;  height: 64px;  font-size: 22px; }
+.tile--sm   { width: 58px;  height: 58px;  font-size: 20px; }
+.tile--wide { width: 130px; height: 80px;  font-size: 18px; border-radius: 10px; }
 
-/* ---- Hint / feedback panel ---- */
+/* In dark mode, tiles get a subtle inner border so they pop on the dark card */
+[data-theme="dark"] .tile {
+  outline: 2px solid rgba(255,255,255,0.08);
+  outline-offset: -2px;
+}
+
+/* ---------- Animal tile (defined in animals/index.html but base vars here) ---------- */
+.animal-tile {
+  background: var(--bg-animal-tile);
+  box-shadow: var(--shadow-animal);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+}
+
+.animal-tile .animal-name {
+  color: var(--text-animal);
+  transition: color 0.3s;
+}
+
+/* ---------- Hint / feedback panel ---------- */
 .hint-panel {
   margin: 16px auto 0;
   min-height: 80px;
@@ -83,7 +203,8 @@ body {
 .hint-panel .hint-number {
   font-size: 48px;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--text-hint-en);
+  transition: color 0.3s;
 }
 
 .hint-panel .hint-letter {
@@ -97,26 +218,25 @@ body {
   font-size: 11px;
   font-weight: bold;
   letter-spacing: 0.5px;
-  padding: 1px 5px;
+  padding: 1px 6px;
   border-radius: 4px;
   margin-right: 4px;
   vertical-align: middle;
-  background: #eee;
-  color: #444;
+  transition: background 0.3s, color 0.3s;
 }
 
-.hint-panel .lang-en  { background: #d6eaf8; color: #1a5276; }
-.hint-panel .lang-bel { background: #d5f5e3; color: #1e8449; }
+.hint-panel .lang-en  { background: var(--lang-en-bg);  color: var(--lang-en-text); }
+.hint-panel .lang-bel { background: var(--lang-bel-bg); color: var(--lang-bel-text); }
 
-.hint-panel .hint-word-en  { font-size: 24px; font-weight: bold; color: #2c3e50; }
-.hint-panel .hint-word-bel { font-size: 18px; color: #555; }
+.hint-panel .hint-word-en  { font-size: 24px; font-weight: bold; color: var(--text-hint-en);  transition: color 0.3s; }
+.hint-panel .hint-word-bel { font-size: 18px;                    color: var(--text-hint-bel); transition: color 0.3s; }
 
-/* ---- Back button ---- */
+/* ---------- Back button ---------- */
 .btn-back {
   display: inline-block;
   margin-top: 20px;
   padding: 10px 20px;
-  background: #2c3e50;
+  background: var(--btn-back-bg);
   color: #ffffff;
   text-decoration: none;
   border-radius: 10px;
@@ -125,9 +245,9 @@ body {
   transition: background 0.2s;
 }
 
-.btn-back:hover { background: #1a252f; }
+.btn-back:hover { background: var(--btn-back-hover); }
 
-/* ---- Home menu buttons ---- */
+/* ---------- Home menu buttons ---------- */
 .menu-btn {
   display: inline-block;
   margin: 8px;
@@ -142,5 +262,9 @@ body {
   transition: transform 0.18s, filter 0.18s;
 }
 
-.menu-btn:hover  { transform: scale(1.06); filter: brightness(1.08); }
+.menu-btn:hover  { transform: scale(1.06); filter: brightness(1.10); }
 .menu-btn:active { transform: scale(0.97); }
+
+/* In dark mode dim the menu buttons slightly so they're not glaring */
+[data-theme="dark"] .menu-btn { filter: brightness(0.85); }
+[data-theme="dark"] .menu-btn:hover { filter: brightness(1.00); }

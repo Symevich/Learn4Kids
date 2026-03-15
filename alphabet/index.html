@@ -7,11 +7,42 @@
   <link rel="stylesheet" href="../style.css">
   <script src="../tts.js"></script>
   <script src="../theme.js"></script>
+  <style>
+    .card-header {
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .case-toggle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--btn-back-bg);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    .case-toggle:hover  { background: var(--btn-back-hover); }
+    .case-toggle:active { transform: scale(0.93); }
+  </style>
 </head>
 <body>
 <div class="page-card">
-  <h1 class="page-title">🔤 Ангельскі алфавіт</h1>
-  <p class="page-subtitle">Націсні на літару — пачуеш, як яна гучыць!</p>
+
+  <div class="card-header">
+    <button class="case-toggle" id="case-btn" title="Змяніць рэгістр">Aa</button>
+    <h1 class="page-title">🔤 Ангельскі алфавіт</h1>
+    <p class="page-subtitle">Націсні на літару — пачуеш, як яна гучыць!</p>
+  </div>
 
   <div class="item-grid" id="letter-grid"></div>
 
@@ -21,7 +52,6 @@
 </div>
 
 <script>
-/* Belarusian phonetic approximations for each letter name */
 const LETTER_NAMES_BEL = {
   A:'эй',  B:'бі',     C:'сі',    D:'дзі',    E:'і',
   F:'эф',  G:'джы',    H:'эйч',   I:'ай',     J:'джэй',
@@ -36,28 +66,49 @@ const COLORS = [
   '#8bc34a','#795548','#607d8b'
 ];
 
-const grid = document.getElementById('letter-grid');
-const hint = document.getElementById('hint');
+const grid    = document.getElementById('letter-grid');
+const hint    = document.getElementById('hint');
+const caseBtn = document.getElementById('case-btn');
 
+let isUpperCase = true;   /* current display state */
+
+/* Build the 26 tiles once */
+const tiles = [];
 for (let i = 0; i < 26; i++) {
-  const letter = String.fromCharCode(65 + i);
-  const btn = document.createElement('button');
+  const upper = String.fromCharCode(65 + i);   /* A–Z */
+  const btn   = document.createElement('button');
   btn.className = 'tile tile--lg';
-  btn.textContent = letter;
+  btn.textContent = upper;
   btn.style.backgroundColor = COLORS[i % COLORS.length];
-  btn.addEventListener('click', () => speak(letter));
+  btn.addEventListener('click', function() { speak(upper); });
   grid.appendChild(btn);
+  tiles.push(btn);
 }
 
-function speak(letter) {
-  const belName = LETTER_NAMES_BEL[letter] || '';
+/* Case toggle button */
+caseBtn.addEventListener('click', function() {
+  isUpperCase = !isUpperCase;
+  caseBtn.textContent = isUpperCase ? 'Aa' : 'aA';
+
+  tiles.forEach(function(btn) {
+    const upper = btn.textContent.toUpperCase();
+    btn.textContent = isUpperCase ? upper : upper.toLowerCase();
+  });
+
+  /* clear the hint so it doesn't show stale casing */
+  hint.innerHTML = '';
+});
+
+function speak(upperLetter) {
+  const belName    = LETTER_NAMES_BEL[upperLetter] || '';
+  const displayed  = isUpperCase ? upperLetter : upperLetter.toLowerCase();
 
   hint.innerHTML =
-    '<div class="hint-letter">' + letter + '</div>' +
-    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + letter + '</span></div>' +
+    '<div class="hint-letter">' + displayed + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + displayed + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + belName + '</span></div>';
 
-  TTS.speak(letter);
+  TTS.speak(upperLetter.toLowerCase());   /* audio file is always lowercase */
 }
 
 TTS.preload();

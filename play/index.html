@@ -297,6 +297,12 @@
     .btn-restart:active { transform: scale(0.95); }
 
     /* ---- Animations ---- */
+    @keyframes revealPop {
+      0%   { transform: scale(0.4); opacity: 0; }
+      60%  { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
     @keyframes pop {
       0%   { transform: scale(1); }
       40%  { transform: scale(1.15); }
@@ -407,6 +413,7 @@ var qIndex      = 0;
 var score       = 0;
 var answered    = false;
 var currentItem = null;
+var _autoTimer  = null;
 
 function getMode() {
   return new URLSearchParams(window.location.search).get('mode') || 'animals';
@@ -475,10 +482,12 @@ function renderQuestion() {
 
   } else if (currentItem.type === 'color') {
     qMain.className = 'question-main';
-    qMain.innerHTML = '<div style="width:100px;height:100px;border-radius:50%;' +
-      'background:' + currentItem.display + ';margin:0 auto;' +
-      'box-shadow:0 4px 16px rgba(0,0,0,0.25)"></div>';
-    document.getElementById('q-label').textContent = 'Які гэта колер па-ангельску?';
+    /* show ? circle in a neutral grey — reveal the real color after answer */
+    qMain.innerHTML = '<div id="color-reveal" style="width:100px;height:100px;border-radius:50%;' +
+      'background:#aaa;margin:0 auto;box-shadow:0 4px 16px rgba(0,0,0,0.18);' +
+      'display:flex;align-items:center;justify-content:center;' +
+      'font-size:40px;font-weight:bold;color:#fff;">?</div>';
+    document.getElementById('q-label').textContent = 'Паслухай і выбяры адказ:';
     document.getElementById('q-hint').textContent  = currentItem.bel;
 
   } else {
@@ -516,8 +525,17 @@ function renderQuestion() {
       lbl.textContent = item.label;
       btn.appendChild(swatch);
       btn.appendChild(lbl);
+    } else if (item.type === 'emoji') {
+      /* show emoji + text on answer buttons */
+      var em = document.createElement('span');
+      em.className = 'ans-emoji';
+      em.textContent = item.display;
+      var lbl = document.createElement('span');
+      lbl.className = 'ans-text';
+      lbl.textContent = item.label;
+      btn.appendChild(em);
+      btn.appendChild(lbl);
     } else {
-      /* emoji — no text */
       var lbl = document.createElement('span');
       lbl.className = 'ans-text';
       lbl.textContent = item.label;
@@ -529,6 +547,23 @@ function renderQuestion() {
   });
 }
 
+function revealQuestion() {
+  var qMain = document.getElementById('q-main');
+  if (currentItem.type === 'emoji') {
+    /* swap ? for the actual emoji */
+    qMain.innerHTML = '<span style="font-size:72px;animation:revealPop 0.35s ease">' +
+      currentItem.display + '</span>';
+  } else if (currentItem.type === 'color') {
+    /* swap grey ? circle for the real color */
+    var circle = document.getElementById('color-reveal');
+    if (circle) {
+      circle.style.background  = currentItem.display;
+      circle.style.transition  = 'background 0.35s ease';
+      circle.textContent       = '';
+    }
+  }
+}
+
 function checkAnswer(chosen, btn) {
   if (answered) return;
   answered = true;
@@ -536,6 +571,9 @@ function checkAnswer(chosen, btn) {
   document.querySelectorAll('.answer-btn').forEach(function(b) { b.disabled = true; });
 
   var correct = chosen.audio === currentItem.audio;
+
+  /* reveal the answer in the question area */
+  revealQuestion();
 
   if (correct) {
     score++;
@@ -574,11 +612,16 @@ function checkAnswer(chosen, btn) {
     }
   }
 
-  /* show Next button — NO auto-advance */
+  /* show Next button and start 2.5 s auto-advance */
   document.getElementById('btn-next').style.display = 'inline-block';
+  _autoTimer = setTimeout(function() {
+    _autoTimer = null;
+    nextQuestion();
+  }, 2500);
 }
 
 function nextQuestion() {
+  if (_autoTimer) { clearTimeout(_autoTimer); _autoTimer = null; }
   qIndex++;
   if (qIndex >= pool.length) {
     showEnd();

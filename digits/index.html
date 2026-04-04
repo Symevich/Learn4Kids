@@ -4,9 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🔢 Лічбы 0–9 — Learn4Kids</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../audio.js"></script>
-  <script src="../theme.js"></script>
+   <link rel="stylesheet" href="../style.css">
+   <script src="../data.js"></script>
+   <script src="../audio.js"></script>
+   <script src="../theme.js"></script>
 </head>
 <body>
 <div class="page-card">
@@ -21,35 +22,28 @@
 </div>
 
 <script>
-const DIGITS_EN = ['zero','one','two','three','four','five','six','seven','eight','nine'];
-const DIGITS_BEL = ['нуль','адзін','два','тры','чатыры','пяць','шэсць','сем','восем','дзевяць'];
 const COLORS = ['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722'];
 
 const grid = document.getElementById('digit-grid');
 const hint = document.getElementById('hint');
 
-for (let i = 0; i <= 9; i++) {
+LEARN4KIDS_DATA.digits.forEach(function(digit, i) {
   const btn = document.createElement('button');
   btn.className = 'tile tile--md';
-  btn.textContent = i;
+  btn.textContent = digit.display;
   btn.style.backgroundColor = COLORS[i];
-  btn.addEventListener('click', () => speak(i));
+  btn.addEventListener('click', () => speak(digit));
   grid.appendChild(btn);
-}
+});
 
-function speak(n) {
-  const enWord  = DIGITS_EN[n];
-  const belWord = DIGITS_BEL[n];
-
+function speak(digit) {
   hint.innerHTML =
-    '<div class="hint-number">' + n + '</div>' +
-    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + enWord + '</span></div>' +
-    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + belWord + '</span></div>';
+    '<div class="hint-number">' + digit.display + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + digit.label + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + digit.bel + '</span></div>';
 
-  TTS.speak(enWord);
+  TTS.speak(digit.audio);
 }
-
-TTS.preload();
 </script>
 </body>
 </html>

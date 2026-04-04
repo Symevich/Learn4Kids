@@ -4,9 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🐾 Жывёлы — Learn4Kids</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../audio.js"></script>
-  <script src="../theme.js"></script>
+   <link rel="stylesheet" href="../style.css">
+   <script src="../data.js"></script>
+   <script src="../audio.js"></script>
+   <script src="../theme.js"></script>
   <style>
     .animal-tile {
       display: flex;
@@ -44,62 +45,27 @@
 </div>
 
 <script>
-const ANIMALS = [
-  { en: 'cat',         bel: 'кот',         emoji: '🐱' },
-  { en: 'dog',         bel: 'сабака',      emoji: '🐶' },
-  { en: 'bird',        bel: 'птушка',      emoji: '🐦' },
-  { en: 'fish',        bel: 'рыба',        emoji: '🐟' },
-  { en: 'rabbit',      bel: 'трус',        emoji: '🐰' },
-  { en: 'bear',        bel: 'мядзведзь',   emoji: '🐻' },
-  { en: 'lion',        bel: 'леў',         emoji: '🦁' },
-  { en: 'tiger',       bel: 'тыгр',        emoji: '🐯' },
-  { en: 'elephant',    bel: 'слон',        emoji: '🐘' },
-  { en: 'monkey',      bel: 'малпа',       emoji: '🐒' },
-  { en: 'horse',       bel: 'конь',        emoji: '🐴' },
-  { en: 'cow',         bel: 'карова',      emoji: '🐮' },
-  { en: 'pig',         bel: 'свіння',      emoji: '🐷' },
-  { en: 'sheep',       bel: 'авечка',      emoji: '🐑' },
-  { en: 'chicken',     bel: 'курыца',      emoji: '🐔' },
-  { en: 'duck',        bel: 'качка',       emoji: '🦆' },
-  { en: 'frog',        bel: 'жаба',        emoji: '🐸' },
-  { en: 'snake',       bel: 'змяя',        emoji: '🐍' },
-  { en: 'turtle',      bel: 'чарапаха',    emoji: '🐢' },
-  { en: 'penguin',     bel: 'пінгвін',     emoji: '🐧' },
-  { en: 'owl',         bel: 'сава',        emoji: '🦉' },
-  { en: 'fox',         bel: 'ліса',        emoji: '🦊' },
-  { en: 'wolf',        bel: 'воўк',        emoji: '🐺' },
-  { en: 'deer',        bel: 'алень',       emoji: '🦌' },
-  { en: 'giraffe',     bel: 'жырафа',      emoji: '🦒' },
-  { en: 'zebra',       bel: 'зебра',       emoji: '🦓' },
-  { en: 'crocodile',   bel: 'кракадзіл',   emoji: '🐊' },
-  { en: 'dolphin',     bel: 'дэльфін',     emoji: '🐬' },
-  { en: 'bee',         bel: 'пчала',       emoji: '🐝' },
-  { en: 'butterfly',   bel: 'матыль',      emoji: '🦋' }
-];
-
 const grid = document.getElementById('animal-grid');
 const hint = document.getElementById('hint');
 
-ANIMALS.forEach(function(animal) {
+LEARN4KIDS_DATA.animals.forEach(function(animal) {
   const tile = document.createElement('button');
   tile.className = 'animal-tile';
   tile.innerHTML =
-    '<span class="animal-emoji">' + animal.emoji + '</span>' +
-    '<span class="animal-name">' + animal.en + '</span>';
+    '<span class="animal-emoji">' + animal.display + '</span>' +
+    '<span class="animal-name">' + animal.label + '</span>';
   tile.addEventListener('click', function() { speak(animal); });
   grid.appendChild(tile);
 });
 
 function speak(animal) {
   hint.innerHTML =
-    '<div style="font-size:64px; line-height:1;">' + animal.emoji + '</div>' +
-    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + animal.en + '</span></div>' +
+    '<div style="font-size:64px; line-height:1;">' + animal.display + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + animal.label + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + animal.bel + '</span></div>';
 
-  TTS.speak(animal.en);
+  TTS.speak(animal.audio);
 }
-
-TTS.preload();
 </script>
 </body>
 </html>

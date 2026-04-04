@@ -4,9 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🔤 Алфавіт — Learn4Kids</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../audio.js"></script>
-  <script src="../theme.js"></script>
+   <link rel="stylesheet" href="../style.css">
+   <script src="../data.js"></script>
+   <script src="../audio.js"></script>
+   <script src="../theme.js"></script>
   <style>
     .card-header {
       margin-bottom: 4px;
@@ -81,9 +82,10 @@ const caseBtn = document.getElementById('case-btn');
 let isUpperCase = true;   /* current display state */
 
 /* Build the 26 tiles once */
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const tiles = [];
-for (let i = 0; i < 26; i++) {
-  const upper = String.fromCharCode(65 + i);   /* A–Z */
+for (let i = 0; i < LETTERS.length; i++) {
+  const upper = LETTERS[i];
   const btn   = document.createElement('button');
   btn.className = 'tile tile--lg';
   btn.textContent = upper;

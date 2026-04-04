@@ -4,9 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🌈 Колеры — Learn4Kids</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../audio.js"></script>
-  <script src="../theme.js"></script>
+   <link rel="stylesheet" href="../style.css">
+   <script src="../data.js"></script>
+   <script src="../audio.js"></script>
+   <script src="../theme.js"></script>
 </head>
 <body>
 <div class="page-card">
@@ -21,45 +22,28 @@
 </div>
 
 <script>
-const COLORS = [
-  { en: 'red',    bel: 'чырвоны',  hex: '#e74c3c' },
-  { en: 'orange', bel: 'аранжавы', hex: '#e67e22' },
-  { en: 'yellow', bel: 'жоўты',    hex: '#d4ac0d' },
-  { en: 'green',  bel: 'зялёны',   hex: '#2ecc71' },
-  { en: 'blue',   bel: 'сіні',     hex: '#3498db' },
-  { en: 'purple', bel: 'фіялетавы',hex: '#9b59b6' },
-  { en: 'pink',   bel: 'ружовы',   hex: '#e91e63' },
-  { en: 'brown',  bel: 'карычневы',hex: '#8b5e3c' },
-  { en: 'black',  bel: 'чорны',    hex: '#2c3e50' },
-  { en: 'white',  bel: 'белы',     hex: '#bdc3c7', dark: true },
-  { en: 'gray',   bel: 'шэры',     hex: '#7f8c8d' },
-  { en: 'gold',   bel: 'залаты',   hex: '#f0b429' }
-];
-
 const grid = document.getElementById('color-grid');
 const hint = document.getElementById('hint');
 
-COLORS.forEach(function(color) {
+LEARN4KIDS_DATA.colors.forEach(function(color) {
   const tile = document.createElement('div');
   tile.className = 'tile tile--wide';
-  tile.style.backgroundColor = color.hex;
+  tile.style.backgroundColor = color.display;
   /* white tile needs dark text to be readable */
-  tile.style.color = color.dark ? '#2c3e50' : '#ffffff';
-  tile.textContent = color.en;
+  tile.style.color = color.label === 'white' ? '#2c3e50' : '#ffffff';
+  tile.textContent = color.label;
   tile.addEventListener('click', function() { speak(color); });
   grid.appendChild(tile);
 });
 
 function speak(color) {
   hint.innerHTML =
-    '<div class="hint-word-en" style="font-size:32px; margin-bottom:6px;">' + color.en + '</div>' +
-    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + color.en + '</span></div>' +
+    '<div class="hint-word-en" style="font-size:32px; margin-bottom:6px;">' + color.label + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + color.label + '</span></div>' +
     '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + color.bel + '</span></div>';
 
-  TTS.speak(color.en);
+  TTS.speak(color.audio);
 }
-
-TTS.preload();
 </script>
 </body>
 </html>

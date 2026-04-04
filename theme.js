@@ -2,14 +2,22 @@
 (function () {
   var STORAGE_KEY = 'l4k-theme';
 
-  /* Apply saved theme before first paint to avoid flash */
+  // Apply saved theme before first paint to avoid flash
   var saved = localStorage.getItem(STORAGE_KEY);
   if (saved === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
 
+  function updateIcon() {
+    var knob = document.getElementById('toggle-knob');
+    if (knob) {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      knob.textContent = isDark ? '🌙' : '☀️';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
-    /* Inject toggle button into every page */
+    // Inject toggle button into every page
     var btn = document.createElement('button');
     btn.className = 'theme-toggle';
     btn.setAttribute('aria-label', 'Змяніць тэму');
@@ -30,11 +38,5 @@
       }
       updateIcon();
     });
-
-    function updateIcon() {
-      var knob = document.getElementById('toggle-knob');
-      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      knob.textContent = isDark ? '🌙' : '☀️';
-    }
   });
 })();

@@ -4,9 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🎮 Гуляй — Learn4Kids</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../audio.js"></script>
-  <script src="../theme.js"></script>
+   <link rel="stylesheet" href="../style.css">
+   <script src="../data.js"></script>
+   <script src="../audio.js"></script>
+   <script src="../theme.js"></script>
   <style>
     .quiz-card {
       max-width: 520px;
@@ -384,76 +385,10 @@
 
 <script>
 /* ================================================================
-   DATA
-================================================================ */
+    DATA
+ ================================================================ */
 
-var DATASETS = {
-  digits: (function() {
-    var EN  = ['zero','one','two','three','four','five','six','seven','eight','nine'];
-    var BEL = ['нуль','адзін','два','тры','чатыры','пяць','шэсць','сем','восем','дзевяць'];
-    return EN.map(function(en, i) {
-      return { type:'text', display:String(i), label:en, bel:BEL[i], audio:en };
-    });
-  }()),
-
-  alphabet: (function() {
-    var BEL = {A:'эй',B:'бі',C:'сі',D:'дзі',E:'і',F:'эф',G:'джы',H:'эйч',
-               I:'ай',J:'джэй',K:'кей',L:'эл',M:'эм',N:'эн',O:'оў',P:'пі',
-               Q:'к\'ю',R:'ар',S:'эс',T:'ці',U:'ю',V:'ві',W:'дабл-ю',
-               X:'экс',Y:'вай',Z:'зэд'};
-    return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(function(L) {
-      return { type:'text', display:L, label:L, bel:BEL[L], audio:L.toLowerCase() };
-    });
-  }()),
-
-  colors: [
-    {type:'color',display:'#e74c3c',label:'red',    bel:'чырвоны',  audio:'red'    },
-    {type:'color',display:'#e67e22',label:'orange', bel:'аранжавы', audio:'orange' },
-    {type:'color',display:'#d4ac0d',label:'yellow', bel:'жоўты',    audio:'yellow' },
-    {type:'color',display:'#2ecc71',label:'green',  bel:'зялёны',   audio:'green'  },
-    {type:'color',display:'#3498db',label:'blue',   bel:'сіні',     audio:'blue'   },
-    {type:'color',display:'#9b59b6',label:'purple', bel:'фіялетавы',audio:'purple' },
-    {type:'color',display:'#e91e63',label:'pink',   bel:'ружовы',   audio:'pink'   },
-    {type:'color',display:'#8b5e3c',label:'brown',  bel:'карычневы',audio:'brown'  },
-    {type:'color',display:'#2c3e50',label:'black',  bel:'чорны',    audio:'black'  },
-    {type:'color',display:'#bdc3c7',label:'white',  bel:'белы',     audio:'white'  },
-    {type:'color',display:'#7f8c8d',label:'gray',   bel:'шэры',     audio:'gray'   },
-    {type:'color',display:'#f0b429',label:'gold',   bel:'залаты',   audio:'gold'   },
-  ],
-
-  animals: [
-    {type:'emoji',display:'🐱',label:'cat',       bel:'кот',        audio:'cat'      },
-    {type:'emoji',display:'🐶',label:'dog',       bel:'сабака',     audio:'dog'      },
-    {type:'emoji',display:'🐦',label:'bird',      bel:'птушка',     audio:'bird'     },
-    {type:'emoji',display:'🐟',label:'fish',      bel:'рыба',       audio:'fish'     },
-    {type:'emoji',display:'🐰',label:'rabbit',    bel:'трус',       audio:'rabbit'   },
-    {type:'emoji',display:'🐻',label:'bear',      bel:'мядзведзь',  audio:'bear'     },
-    {type:'emoji',display:'🦁',label:'lion',      bel:'леў',        audio:'lion'     },
-    {type:'emoji',display:'🐯',label:'tiger',     bel:'тыгр',       audio:'tiger'    },
-    {type:'emoji',display:'🐘',label:'elephant',  bel:'слон',       audio:'elephant' },
-    {type:'emoji',display:'🐒',label:'monkey',    bel:'малпа',      audio:'monkey'   },
-    {type:'emoji',display:'🐴',label:'horse',     bel:'конь',       audio:'horse'    },
-    {type:'emoji',display:'🐮',label:'cow',       bel:'карова',     audio:'cow'      },
-    {type:'emoji',display:'🐷',label:'pig',       bel:'свіння',     audio:'pig'      },
-    {type:'emoji',display:'🐑',label:'sheep',     bel:'авечка',     audio:'sheep'    },
-    {type:'emoji',display:'🐔',label:'chicken',   bel:'курыца',     audio:'chicken'  },
-    {type:'emoji',display:'🦆',label:'duck',      bel:'качка',      audio:'duck'     },
-    {type:'emoji',display:'🐸',label:'frog',      bel:'жаба',       audio:'frog'     },
-    {type:'emoji',display:'🐍',label:'snake',     bel:'змяя',       audio:'snake'    },
-    {type:'emoji',display:'🐢',label:'turtle',    bel:'чарапаха',   audio:'turtle'   },
-    {type:'emoji',display:'🐧',label:'penguin',   bel:'пінгвін',    audio:'penguin'  },
-    {type:'emoji',display:'🦉',label:'owl',       bel:'сава',       audio:'owl'      },
-    {type:'emoji',display:'🦊',label:'fox',       bel:'ліса',       audio:'fox'      },
-    {type:'emoji',display:'🐺',label:'wolf',      bel:'воўк',       audio:'wolf'     },
-    {type:'emoji',display:'🦌',label:'deer',      bel:'алень',      audio:'deer'     },
-    {type:'emoji',display:'🦒',label:'giraffe',   bel:'жырафа',     audio:'giraffe'  },
-    {type:'emoji',display:'🦓',label:'zebra',     bel:'зебра',      audio:'zebra'    },
-    {type:'emoji',display:'🐊',label:'crocodile', bel:'кракадзіл',  audio:'crocodile'},
-    {type:'emoji',display:'🐬',label:'dolphin',   bel:'дэльфін',    audio:'dolphin'  },
-    {type:'emoji',display:'🐝',label:'bee',       bel:'пчала',      audio:'bee'      },
-    {type:'emoji',display:'🦋',label:'butterfly', bel:'матыль',     audio:'butterfly'},
-  ],
-};
+var DATASETS = LEARN4KIDS_DATA;
 
 DATASETS.mix = DATASETS.digits
   .concat(DATASETS.alphabet)
@@ -547,10 +482,17 @@ function renderQuestion() {
     document.getElementById('q-hint').textContent  = currentItem.bel;
 
   } else {
-    qMain.className = 'question-main text-q';
-    qMain.textContent = currentItem.display;
-    document.getElementById('q-label').textContent = 'Як чытаецца гэты знак па-ангельску?';
-    document.getElementById('q-hint').textContent  = 'БЕЛ: ' + currentItem.bel;
+    if (currentItem.label === currentItem.display) { // alphabet: hide the letter to focus on hearing
+      qMain.className = 'question-main';
+      qMain.innerHTML = '<span class="q-mystery">?</span>';
+      document.getElementById('q-label').textContent = 'Паслухай і выбяры адказ:';
+      document.getElementById('q-hint').textContent  = '';
+    } else { // digits: show the number
+      qMain.className = 'question-main text-q';
+      qMain.textContent = currentItem.display;
+      document.getElementById('q-label').textContent = 'Як чытаецца гэты знак па-ангельску?';
+      document.getElementById('q-hint').textContent  = 'БЕЛ: ' + currentItem.bel;
+    }
   }
 
   TTS.speak(currentItem.audio);
@@ -575,7 +517,7 @@ function renderQuestion() {
       btn.appendChild(swatch);
       btn.appendChild(lbl);
     } else {
-      /* no emoji — text only */
+      /* emoji — no text */
       var lbl = document.createElement('span');
       lbl.className = 'ans-text';
       lbl.textContent = item.label;
@@ -603,6 +545,13 @@ function checkAnswer(chosen, btn) {
     addStar();
     document.getElementById('score-num').textContent = score + ' ⭐';
     TTS.speak(currentItem.audio);
+
+    // Reveal the letter for alphabet after correct answer
+    if (currentItem.type === 'text' && currentItem.label === currentItem.display) {
+      document.getElementById('q-main').className = 'question-main text-q';
+      document.getElementById('q-main').textContent = currentItem.display;
+      document.getElementById('q-label').textContent = 'Выдатна! Гэта была літара:';
+    }
   } else {
     btn.classList.add('wrong');
     /* highlight the right answer */
@@ -616,6 +565,13 @@ function checkAnswer(chosen, btn) {
     });
     document.getElementById('feedback').textContent = getWrongPhrase();
     document.getElementById('feedback').className   = 'feedback wrong';
+
+    // Reveal the letter for alphabet after wrong answer
+    if (currentItem.type === 'text' && currentItem.label === currentItem.display) {
+      document.getElementById('q-main').className = 'question-main text-q';
+      document.getElementById('q-main').textContent = currentItem.display;
+      document.getElementById('q-label').textContent = 'Правільны адказ:';
+    }
   }
 
   /* show Next button — NO auto-advance */

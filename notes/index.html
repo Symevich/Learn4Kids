@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🎹 Ноты — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .keyboard {
+      position: relative;
+      display: inline-block;
+      margin: 24px 0;
+    }
+    .white-keys {
+      display: flex;
+      gap: 2px;
+    }
+    .black-keys {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .key {
+      border: 2px solid #000;
+      border-radius: 0 0 5px 5px;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      user-select: none;
+    }
+    .key.white {
+      width: 50px;
+      height: 150px;
+      background: #fff;
+      color: #000;
+    }
+    .key.white:hover {
+      background: #f0f0f0;
+    }
+    .key.black {
+      width: 30px;
+      height: 100px;
+      background: #000;
+      color: #fff;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+    }
+    .key.black:hover {
+      opacity: 0.8;
+    }
+  </style>
+  <script src="../data.js"></script>
+  <script src="../audio.js"></script>
+  <script src="../theme.js"></script>
+</head>
+<body>
+<div class="page-card">
+  <h1 class="page-title">🎹 Ноты</h1>
+  <p class="page-subtitle">Націсні на ноту — пачуеш яе!</p>
+
+  <div class="keyboard" id="note-grid">
+    <div class="white-keys"></div>
+    <div class="black-keys"></div>
+  </div>
+
+  <div class="hint-panel" id="hint" aria-live="polite"></div>
+
+  <a class="btn-back" href="../learn.html">⬅️ Назад у меню</a>
+</div>
+
+<script>
+const COLORS = [
+  '#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c',
+  '#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722',
+  '#8bc34a','#795548','#607d8b'
+];
+
+const grid = document.getElementById('note-grid');
+const whiteKeys = grid.querySelector('.white-keys');
+const blackKeys = grid.querySelector('.black-keys');
+const hint = document.getElementById('hint');
+
+const blackPositions = [40, 92, 196, 248, 300]; // left positions for C#, D#, F#, G#, A#
+
+LEARN4KIDS_DATA.notes.forEach(function(note, i) {
+  const btn = document.createElement('button');
+  btn.textContent = note.display;
+  if (note.display.includes('#')) {
+    btn.className = 'key black';
+    btn.style.left = blackPositions.shift() + 'px';
+    if (note.audio) {
+      btn.addEventListener('click', function() { playNote(note); });
+    }
+    blackKeys.appendChild(btn);
+  } else {
+    btn.className = 'key white';
+    btn.addEventListener('click', function() { playNote(note); });
+    whiteKeys.appendChild(btn);
+  }
+});
+
+function playNote(note) {
+  hint.innerHTML =
+    '<div class="hint-letter">' + note.display + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + note.display + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + note.bel + '</span></div>';
+
+  if (note.audio) {
+    // Play the piano note sound
+    const audio = new Audio('../audio/en/' + note.audio + '.mp3');
+    audio.play().catch(function(error) {
+      console.warn('Audio play failed:', error);
+    });
+  }
+}
+</script>
+</body>
+</html>

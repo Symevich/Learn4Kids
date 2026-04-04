@@ -122,6 +122,22 @@
       {type:'emoji',display:'❤️',label:'heart',bel:'сэрца',audio:'heart'},
       {type:'emoji',display:'🔸',label:'diamond',bel:'дыямент',audio:'diamond'},
       {type:'emoji',display:'🔴',label:'oval',bel:'авал',audio:'oval'}
+    ],
+
+    notes: [
+      {type:'text',display:'C',label:'C',bel:'до',audio:'do'},
+      {type:'text',display:'C#',label:'C#',bel:'до-дзез',audio:'do-sharp'},
+      {type:'text',display:'D',label:'D',bel:'рэ',audio:'re'},
+      {type:'text',display:'D#',label:'D#',bel:'рэ-дзез',audio:'re-sharp'},
+      {type:'text',display:'E',label:'E',bel:'мі',audio:'mi'},
+      {type:'text',display:'F',label:'F',bel:'фа',audio:'fa'},
+      {type:'text',display:'F#',label:'F#',bel:'фа-дзез',audio:'fa-sharp'},
+      {type:'text',display:'G',label:'G',bel:'соль',audio:'sol'},
+      {type:'text',display:'G#',label:'G#',bel:'соль-дзез',audio:'sol-sharp'},
+      {type:'text',display:'A',label:'A',bel:'ля',audio:'la'},
+      {type:'text',display:'A#',label:'A#',bel:'ля-дзез',audio:'la-sharp'},
+      {type:'text',display:'B',label:'B',bel:'сі',audio:'si'},
+      {type:'text',display:'C',label:'C',bel:'до',audio:'do-octave'}
     ]
   };
 }(typeof window !== 'undefined' ? window : this));

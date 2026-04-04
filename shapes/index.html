@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🔺 Фігуры — Learn4Kids</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../data.js"></script>
+  <script src="../audio.js"></script>
+  <script src="../theme.js"></script>
+  <style>
+    .shape-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+      user-select: none;
+      background: var(--bg-animal-tile);
+      box-shadow: var(--shadow-animal);
+    }
+    .shape-tile:hover  { transform: scale(1.12); box-shadow: var(--shadow-hover); }
+    .shape-tile:active { transform: scale(0.94); }
+
+    .shape-tile .shape-emoji { font-size: 42px; line-height: 1; }
+    .shape-tile .shape-name  { font-size: 12px; font-weight: bold; color: var(--text-animal); margin-top: 4px; transition: color 0.3s; }
+  </style>
+</head>
+<body>
+<div class="page-card">
+  <h1 class="page-title">🔺 Фігуры</h1>
+  <p class="page-subtitle">Націсні на фігуру — пачуеш яе назву па-ангельску!</p>
+
+  <div class="item-grid" id="shape-grid"></div>
+
+  <div class="hint-panel" id="hint" aria-live="polite"></div>
+
+  <a class="btn-back" href="../learn.html">⬅️ Назад у меню</a>
+</div>
+
+<script>
+const grid = document.getElementById('shape-grid');
+const hint = document.getElementById('hint');
+
+LEARN4KIDS_DATA.shapes.forEach(function(shape) {
+  const tile = document.createElement('button');
+  tile.className = 'shape-tile';
+  const emojiSize = (shape.label === 'triangle' || shape.label === 'diamond') ? 'font-size: 50px;' : '';
+  tile.innerHTML =
+    '<span class="shape-emoji" style="' + emojiSize + '">' + shape.display + '</span>' +
+    '<span class="shape-name">' + shape.label + '</span>';
+  tile.addEventListener('click', function() { speak(shape); });
+  grid.appendChild(tile);
+});
+
+function speak(shape) {
+  const hintSize = (shape.label === 'triangle' || shape.label === 'diamond') ? 'font-size:72px;' : 'font-size:64px;';
+  hint.innerHTML =
+    '<div style="' + hintSize + ' line-height:1;">' + shape.display + '</div>' +
+    '<div><span class="lang-label lang-en">ENG</span> <span class="hint-word-en">' + shape.label + '</span></div>' +
+    '<div><span class="lang-label lang-bel">БЕЛ</span> <span class="hint-word-bel">' + shape.bel + '</span></div>';
+
+  TTS.speak(shape.audio);
+}
+
+TTS.preload();
+</script>
+</body>
+</html>

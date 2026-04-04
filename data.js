@@ -112,6 +112,16 @@
       90:'дзевяноста', 91:'дзевяноста адзін', 92:'дзевяноста два', 93:'дзевяноста тры',
       94:'дзевяноста чатыры', 95:'дзевяноста пяць', 96:'дзевяноста шэсць', 97:'дзевяноста сем',
       98:'дзевяноста восем', 99:'дзевяноста дзевяць', 100:'сто'
-    }
+    },
+
+    shapes: [
+      {type:'emoji',display:'🔵',label:'circle',bel:'круг',audio:'circle'},
+      {type:'emoji',display:'🔺',label:'triangle',bel:'трыкутнік',audio:'triangle'},
+      {type:'emoji',display:'⬜',label:'square',bel:'квадрат',audio:'square'},
+      {type:'emoji',display:'⭐',label:'star',bel:'зорка',audio:'star'},
+      {type:'emoji',display:'❤️',label:'heart',bel:'сэрца',audio:'heart'},
+      {type:'emoji',display:'🔸',label:'diamond',bel:'дыямент',audio:'diamond'},
+      {type:'emoji',display:'🔴',label:'oval',bel:'авал',audio:'oval'}
+    ]
   };
 }(typeof window !== 'undefined' ? window : this));
